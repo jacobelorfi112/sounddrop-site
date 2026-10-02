@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sounddrop | Spotify Playlist Downloader</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="page-glow page-glow-one"></div>
+    <div class="page-glow page-glow-two"></div>
+    <div class="container">
+        <header>
+            <div class="brand-lockup">
+                <div class="logo-mark">
+                    <svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor">
+                    <path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.5 17.3c-.2.4-.7.5-1.1.3-3-1.8-6.8-2.2-11.2-1.2-.4.1-.9-.2-1-.6-.1-.4.2-.9.6-1 4.9-1.1 9.1-.6 12.4 1.4.4.2.6.7.3 1.1zm1.5-3.3c-.3.4-.8.6-1.3.3-3.5-2.1-8.8-2.8-12.9-1.5-.5.2-1.1-.1-1.3-.6-.2-.5.1-1.1.6-1.3 4.7-1.4 10.5-.7 14.5 1.7.5.3.6.9.4 1.4zm.1-3.5C15.1 8 8.7 7.8 4.8 9c-.6.2-1.3-.2-1.4-.8-.2-.6.2-1.3.8-1.4 4.5-1.3 11.5-1.1 16 1.6.6.3.8 1.1.4 1.7-.3.5-1.1.7-1.6.3z"/>
+                    </svg>
+                </div>
+                <span class="brand-name">SOUNDDROP</span>
+            </div>
+            <div class="hero-copy">
+                <p class="eyebrow">PLAYLIST AUDIO TOOL</p>
+                <h1>Turn a playlist into <span>your soundtrack.</span></h1>
+                <p class="subtitle">Paste a Spotify playlist, choose your format, and grab every track in high quality.</p>
+            </div>
+        </header>
+
+        <div class="card input-card upload-card">
+            <div class="section-label"><span class="step-number">01</span><div><strong>Drop a link or name a song</strong><small>Paste a Spotify playlist/track link, or type a song name like “Rap God”</small></div></div>
+            <div class="input-group">
+                <div class="url-field"><span class="url-icon">↗</span><input type="text" id="playlist-url" placeholder="Spotify link or song name…" autocomplete="off"></div>
+                <button id="load-btn" class="btn btn-primary"><span>Search</span><span class="btn-arrow">→</span></button>
+            </div>
+            <div id="input-error" class="error-msg"></div>
+        </div>
+
+        <div id="cart-card" class="card cart-card">
+            <button id="cart-toggle" class="collapsible-toggle" type="button" aria-expanded="false">
+                <div class="collapsible-toggle-left">
+                    <span class="step-number cart-step-icon">&#911;</span>
+                    <div>
+                        <strong>Your cart</strong>
+                        <small id="cart-subtitle">Search above and add tracks here to download together</small>
+                    </div>
+                </div>
+                <div class="collapsible-toggle-right">
+                    <span id="cart-count" class="cart-count-badge">0</span>
+                    <span class="cart-chevron">&#9662;</span>
+                </div>
+            </button>
+            <div id="cart-body" class="cart-body hidden">
+                <div class="cart-controls download-controls">
+                    <label class="control-field"><span>Audio format</span><select id="cart-format-select" class="select">
+                        <option value="mp3_320">MP3 320kbps</option><option value="mp3_128">MP3 128kbps</option><option value="flac">FLAC (Lossless)</option><option value="m4a">M4A (AAC)</option>
+                    </select></label>
+                    <label class="control-field"><span>Delivery</span><select id="cart-mode-select" class="select" title="How to download">
+                        <option value="zip">As ZIP file</option>
+                        <option value="individual">Separate files</option>
+                    </select></label>
+                    <button id="cart-clear-btn" class="btn btn-ghost btn-sm"><span>Clear</span></button>
+                    <button id="cart-download-btn" class="btn btn-green"><span>Download cart</span><span>&darr;</span></button>
+                </div>
+                <div id="cart-list" class="track-list cart-list"></div>
+            </div>
+        </div>
+
+        <div id="playlist-info" class="card playlist-card hidden">
+            <button id="playlist-toggle" class="collapsible-toggle" type="button" aria-expanded="true">
+                <div class="collapsible-toggle-left">
+                    <span class="step-number">02</span>
+                    <div>
+                        <strong>Choose how to download</strong>
+                        <small id="playlist-name-label">Your tracks are ready to go</small>
+                    </div>
+                </div>
+                <div class="collapsible-toggle-right">
+                    <span id="track-count" class="track-count"></span>
+                    <span class="cart-chevron">&#9662;</span>
+                </div>
+            </button>
+            <div id="playlist-body" class="collapsible-body">
+            <div class="playlist-header">
+                <div class="playlist-title-wrap">
+                    <img id="playlist-cover" class="playlist-cover hidden" alt="">
+                    <div>
+                        <h2 id="playlist-name"></h2>
+                        <span id="track-count" class="track-count"></span>
+                    </div>
+                </div>
+                    <div class="download-controls">
+                        <label class="control-field"><span>Audio format</span><select id="format-select" class="select">
+                            <option value="mp3_320">MP3 320kbps</option><option value="mp3_128">MP3 128kbps</option><option value="flac">FLAC (Lossless)</option><option value="m4a">M4A (AAC)</option>
+                        </select></label>
+                        <label class="control-field"><span>Delivery</span><select id="mode-select" class="select" title="How to download">
+                            <option value="zip">As ZIP file</option>
+                            <option value="individual">Separate files</option>
+                        </select></label>
+                        <button id="download-btn" class="btn btn-green"><span>Start download</span><span class="btn-arrow">↓</span></button>
+                    </div>
+                </div>
+                <div class="list-heading"><span>TRACKS IN PLAYLIST</span><span>STATUS</span></div><div id="track-list" class="track-list"></div>
+                <div class="copy-names-bar">
+                    <button id="copy-names-btn" class="btn btn-ghost btn-sm" type="button"><span class="btn-text">Copy all song names</span><span class="btn-symbol">&#9779;</span></button>
+                    <span id="copy-names-feedback" class="copy-names-feedback"></span>
+                </div>
+            </div>
+        </div>
+
+        <div id="search-info" class="card playlist-card hidden">
+            <button id="search-toggle" class="collapsible-toggle" type="button" aria-expanded="true">
+                <div class="collapsible-toggle-left">
+                    <span class="step-number">02</span>
+                    <div>
+                        <strong>Pick a result to download</strong>
+                        <small id="search-query-label">Choose a track below</small>
+                    </div>
+                </div>
+                <div class="collapsible-toggle-right">
+                    <span id="search-count" class="track-count"></span>
+                    <span class="cart-chevron">&#9662;</span>
+                </div>
+            </button>
+            <div id="search-body" class="collapsible-body">
+                <div class="playlist-header">
+                    <div>
+                        <h2 id="search-query-text"></h2>
+                    </div>
+                    <div class="download-controls">
+                        <label class="control-field"><span>Audio format</span><select id="search-format-select" class="select">
+                            <option value="mp3_320">MP3 320kbps</option><option value="mp3_128">MP3 128kbps</option><option value="flac">FLAC (Lossless)</option><option value="m4a">M4A (AAC)</option>
+                        </select></label>
+                    </div>
+                </div>
+                <div class="list-heading"><span>SEARCH RESULTS</span><span></span></div>
+                <div id="search-list" class="track-list"></div>
+            </div>
+        </div>
+
+        <div id="progress-section" class="card hidden">
+            <div class="progress-header">
+                <div><p class="eyebrow">IN PROGRESS</p><h3>Building your soundtrack</h3></div>
+                <div class="progress-header-right">
+                    <span id="progress-text">0 / 0</span>
+                    <button id="stop-btn" class="btn btn-red"><span>Stop</span><span>×</span></button>
+                </div>
+            </div>
+            <div class="progress-bar-container">
+                <div id="progress-bar" class="progress-bar"></div>
+            </div>
+            <div id="current-track" class="current-track">
+                <span class="pulse-dot"></span>
+                <span id="current-track-text"></span>
+                <span id="progress-detail" class="progress-detail"></span>
+            </div>
+            <div class="progress-meta">
+                <span id="elapsed-time">0:00</span>
+                <span id="download-speed"></span>
+            </div>
+        </div>
+
+        <div id="download-ready" class="card hidden">
+            <div class="ready-header">
+                <svg viewBox="0 0 24 24" width="48" height="48" fill="#1DB954">
+                    <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+                </svg>
+                <div>
+                    <h3>Download Ready!</h3>
+                    <p id="summary-text"></p>
+                </div>
+            </div>
+            <a id="download-link" class="btn btn-green btn-large" href="#"><span>Download ZIP</span><span>↓</span></a>
+        </div>
+
+        <div id="individual-ready" class="card hidden">
+            <div class="ready-header">
+                <svg viewBox="0 0 24 24" width="48" height="48" fill="#1DB954">
+                    <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+                </svg>
+                <div>
+                    <h3>Downloads Ready!</h3>
+                    <p id="individual-summary-text"></p>
+                </div>
+            </div>
+            <div class="individual-toolbar">
+                <button id="download-all-individual" class="btn btn-primary"><span>Download all tracks</span><span>↓</span></button>
+                <button id="individual-back-btn" class="btn btn-ghost">Back</button>
+            </div>
+            <div id="individual-file-list" class="individual-file-list"></div>
+        </div>
+
+        <div id="stopped-section" class="card hidden">
+            <div class="ready-header">
+                <svg viewBox="0 0 24 24" width="48" height="48" fill="#ff6b6b">
+                    <path d="M6 6h12v12H6z"/>
+                </svg>
+                <div>
+                    <h3>Download Stopped</h3>
+                    <p id="stopped-summary-text"></p>
+                </div>
+            </div>
+            <button id="back-btn" class="btn btn-primary">Back to Start</button>
+        </div>
+
+        <div id="loading-spinner" class="spinner hidden"></div>
+
+    </div>
+    <script src="/static/app.js"></script>
+</body>
+</html>
