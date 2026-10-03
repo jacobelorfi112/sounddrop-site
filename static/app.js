@@ -1,4 +1,4 @@
-const $ = (id) => document.getElementById(id);
+﻿const $ = (id) => document.getElementById(id);
 
 const urlInput = $('playlist-url');
 const loadBtn = $('load-btn');
@@ -67,9 +67,9 @@ let cart = loadCart();
 let searchSeq = 0;
 let liveSearchTimer = null;
 
-const API_ORIGIN = 'https://sp-down-api.tejugenz.workers.dev';
+const RAILWAY_API = 'https://sp-down-api.tejugenz.workers.dev';
 const SAME_ORIGIN_HOSTS = ['sp-down-production.up.railway.app', 'localhost', '127.0.0.1'];
-const API_BASE = SAME_ORIGIN_HOSTS.includes(location.hostname) ? '' : API_ORIGIN;
+const API_BASE = SAME_ORIGIN_HOSTS.includes(location.hostname) ? '' : RAILWAY_API;
 
 async function api(path, body) {
     const resp = await fetch(API_BASE + path, {
@@ -476,7 +476,7 @@ function updateProgress(data) {
         currentTrackText.textContent = label;
         progressDetail.textContent = tp > 0 ? `${Math.round(tp)}%` : '';
     } else {
-        currentTrackText.textContent = 'Preparing…';
+        currentTrackText.textContent = 'Preparingâ€¦';
         progressDetail.textContent = '';
     }
 
@@ -678,7 +678,7 @@ playlistToggle.addEventListener('click', () => {
 
 copyNamesBtn.addEventListener('click', async () => {
     if (!loadedTracks.length) return;
-    const text = loadedTracks.map((t, i) => `${i + 1}. ${t.title} — ${t.artists}`).join('\n');
+    const text = loadedTracks.map((t, i) => `${i + 1}. ${t.title} â€” ${t.artists}`).join('\n');
     try {
         await navigator.clipboard.writeText(text);
         copyNamesFeedback.textContent = `Copied ${loadedTracks.length} names`;
@@ -746,7 +746,7 @@ function renderCart() {
         : `${cart.length} ${cart.length === 1 ? 'track' : 'tracks'} ready to download`;
 
     if (cart.length === 0) {
-        cartList.innerHTML = '<div class="search-empty">Your cart is empty. Search above and tap “Add to cart”.</div>';
+        cartList.innerHTML = '<div class="search-empty">Your cart is empty. Search above and tap â€œAdd to cartâ€.</div>';
         return;
     }
     cartList.innerHTML = cart.map((c, i) => `
