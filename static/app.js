@@ -67,9 +67,9 @@ let cart = loadCart();
 let searchSeq = 0;
 let liveSearchTimer = null;
 
-const RAILWAY_API = 'https://sp-down-api.tejugenz.workers.dev';
-const SAME_ORIGIN_HOSTS = ['sp-down-production.up.railway.app', 'localhost', '127.0.0.1'];
-const API_BASE = SAME_ORIGIN_HOSTS.includes(location.hostname) ? '' : RAILWAY_API;
+const API_ORIGIN = 'https://sp-down-api.tejugenz.workers.dev';
+const SAME_ORIGIN_HOSTS = ['localhost', '127.0.0.1'];
+const API_BASE = SAME_ORIGIN_HOSTS.includes(location.hostname) ? '' : API_ORIGIN;
 
 async function api(path, body) {
     const resp = await fetch(API_BASE + path, {
